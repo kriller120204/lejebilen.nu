@@ -564,3 +564,107 @@ section { padding: 76px 0; }
   text-align: center; padding: 8px;
 }
 .upimg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px; }
+
+/* ── Admin shell (layout) ────────────────────────────────────────── */
+.admin-shell, .admin { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+@media (max-width: 880px) {
+  .admin-shell, .admin { grid-template-columns: 1fr; }
+  .aside { position: static; height: auto; flex-direction: row; align-items: center; padding: 12px; overflow-x: auto; }
+  .aside .brand { padding: 4px 12px; }
+  .a-nav { flex-direction: row; }
+  .a-nav .sec-lbl, .a-user { display: none; }
+}
+.admin-main { background: var(--bg-2); min-width: 0; }
+
+/* ── Admin page common ───────────────────────────────────────────── */
+.page-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 26px; flex-wrap: wrap;
+}
+.page-head h1 { font-size: 26px; }
+.sub { color: var(--muted); font-size: 14px; margin-top: 2px; display: block; }
+
+/* KPI inner classes */
+.kpi .kl { font-size: 13px; color: var(--muted); font-weight: 600; }
+.kpi .kv { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -.02em; margin-top: 4px; }
+.kpi .ks { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+/* ── Admin table ─────────────────────────────────────────────────── */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  text-align: left; font-size: 11.5px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 12px 16px; border-bottom: 1px solid var(--line);
+}
+.tbl td { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl tbody tr:hover { background: var(--bg-2); }
+.tbl tbody tr.clickable { cursor: pointer; }
+.table-wrap { overflow-x: auto; }
+
+/* ── Car admin grid ──────────────────────────────────────────────── */
+.car-admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 1100px) { .car-admin-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 680px) { .car-admin-grid { grid-template-columns: 1fr; } }
+.car-admin-card { cursor: pointer; transition: transform .18s, box-shadow .18s; }
+.car-admin-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+/* ── Spec row (inline) ───────────────────────────────────────────── */
+.spec-row { display: flex; align-items: center; color: var(--muted); flex-wrap: wrap; }
+
+/* ── Extra badge colors ──────────────────────────────────────────── */
+.badge.gray { color: var(--muted); background: var(--bg-2); }
+
+/* ── Search wrap (admin kunder) ──────────────────────────────────── */
+.search-wrap { position: relative; width: 280px; }
+.search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.search-wrap .input { padding-left: 34px; }
+
+/* ── Contact / kontakt section ───────────────────────────────────── */
+.kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 760px) { .kontakt-grid { grid-template-columns: 1fr; } }
+.kontakt-grid h3 { font-size: 22px; margin-bottom: 14px; }
+.kontakt-grid p { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--ink-soft); }
+.kontakt-map {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: var(--r-lg); display: flex; align-items: center; justify-content: center;
+  min-height: 240px;
+}
+
+/* ── Car detail page ─────────────────────────────────────────────── */
+.det-wrap { padding: 0 0 60px; }
+.det-layout {
+  display: grid; grid-template-columns: 1.25fr 1fr;
+  gap: 44px; align-items: start;
+}
+@media (max-width: 920px) { .det-layout { grid-template-columns: 1fr; gap: 30px; } }
+.gallery .main-img { border-radius: var(--r-lg); overflow: hidden; }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+.thumbs > * { border-radius: var(--r); overflow: hidden; }
+.sub-head { font-family: var(--display); font-size: 18px; font-weight: 700; margin-bottom: 16px; letter-spacing: -.01em; }
+
+/* Spec items in car detail (override chip style) */
+.spec-grid .spec {
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid var(--line); border-radius: var(--r);
+  padding: 13px 15px; background: var(--surface);
+  /* undo CarCard chip styles */
+  font-size: inherit; color: inherit; font-weight: inherit;
+}
+.spec-grid .spec svg { flex: none; color: var(--blue); }
+.spec-grid .spec .sk { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; display: block; }
+.spec-grid .spec .sv { font-size: 15px; font-weight: 600; display: block; }
+
+/* Booking card on detail page */
+.book-card { position: sticky; top: 90px; }
+.bc-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px; }
+.bc-price .amt { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: -.02em; }
+.bc-price .per { font-size: 15px; color: var(--muted); }
+.bc-fields { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+.bc-note {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: var(--muted);
+  margin-top: 12px; justify-content: center;
+}
+.bc-row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-top: 1px solid var(--line); }
+.bc-row.sub { color: var(--muted); font-size: 13px; }

@@ -136,7 +136,7 @@ export default async function CarDetailPage({ params, searchParams }: Props) {
                   <span className="sv">{car.reg_nr}</span>
                 </div>
               </div>
-              {car.beskrivelse && <p style={{ marginTop: 20, fontSize: 14.5, lineHeight: 1.7, color: 'var(--ink-2)' }}>{car.beskrivelse}</p>}
+              {car.beskrivelse && <p style={{ marginTop: 20, fontSize: 14.5, lineHeight: 1.7, color: 'var(--ink-soft)' }}>{car.beskrivelse}</p>}
             </div>
 
             {/* Availability calendar */}
@@ -148,15 +148,24 @@ export default async function CarDetailPage({ params, searchParams }: Props) {
             {/* Terms */}
             <div className="card" style={{ marginTop: 20, padding: 24 }}>
               <h2 className="sub-head">Lejevilkår</h2>
-              <ul className="terms">
-                <li>Minimum lejeperiode: 1 dag</li>
-                <li>Depositum: {fmt(car.depositum)} reserveres på betalingskort ved afhentning og frigives ved afleveringen.</li>
-                <li>Fri kørsel op til {car.km_per_dag} km/dag. Ekstra km faktureres til 3 kr./km.</li>
-                <li>Bilen skal afleveres med samme brændstofniveau som ved afhentning.</li>
-                <li>Rygning er ikke tilladt i bilen (rengøringsgebyr 1.500 kr.).</li>
-                <li>Bilen må ikke føres uden for EU.</li>
-                <li>Gratis afbestilling frem til 24 timer inden afhentning.</li>
-              </ul>
+              <div className="terms">
+                <ul>
+                  {[
+                    'Minimum lejeperiode: 1 dag',
+                    `Depositum: ${fmt(car.depositum)} reserveres på betalingskort ved afhentning og frigives ved afleveringen.`,
+                    `Fri kørsel op til ${car.km_per_dag} km/dag. Ekstra km faktureres til 3 kr./km.`,
+                    'Bilen skal afleveres med samme brændstofniveau som ved afhentning.',
+                    'Rygning er ikke tilladt i bilen (rengøringsgebyr 1.500 kr.).',
+                    'Bilen må ikke føres uden for EU.',
+                    'Gratis afbestilling frem til 24 timer inden afhentning.',
+                  ].map((t, i) => (
+                    <li key={i}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 

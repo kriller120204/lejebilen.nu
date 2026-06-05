@@ -4,10 +4,12 @@ export const metadata = { title: 'Admin – Lejebilen.nu' }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="admin-shell">
+    <div className="admin">
       <AdminSidebar />
-      <main className="admin-main">
-        {children}
+      <main className="amain">
+        <div className="acontent">
+          {children}
+        </div>
       </main>
     </div>
   )
