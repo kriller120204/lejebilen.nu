@@ -10,6 +10,7 @@ export default function AdminLoginPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (!password.trim()) return
     setLoading(true)
     setError('')
     try {
@@ -19,26 +20,27 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ password }),
       })
       if (res.ok) {
-        router.push('/admin')
-        router.refresh()
+        router.replace('/admin')
       } else {
         setError('Forkert adgangskode')
+        setLoading(false)
       }
-    } finally {
+    } catch {
+      setError('Netværksfejl – prøv igen')
       setLoading(false)
     }
   }
 
   return (
-    <div className="login-page">
-      <div className="login-box">
-        <div className="login-brand">
+    <div className="login-wrap">
+      <div className="login-card">
+        <div className="brand" style={{ justifyContent: 'center', marginBottom: 28 }}>
           <span className="mark"></span>
-          <span>Lejebilen<span style={{ color: 'var(--blue)' }}>.nu</span> Admin</span>
+          Lejebilen<span style={{ color: 'var(--blue)' }}>.nu</span>
         </div>
-        <h1>Log ind</h1>
-        <p className="sub">Ølstykke Auto administrationspanel</p>
-        <form onSubmit={handleSubmit}>
+        <h1>Admin login</h1>
+        <p>Ølstykke Auto administrationspanel</p>
+        <form onSubmit={handleSubmit} style={{ marginTop: 28 }}>
           <div className="field">
             <label>Adgangskode</label>
             <input
@@ -48,11 +50,21 @@ export default function AdminLoginPage() {
               onChange={e => setPassword(e.target.value)}
               placeholder="••••••••"
               autoFocus
+              autoComplete="current-password"
             />
           </div>
-          {error && <div className="form-error">{error}</div>}
-          <button className="btn lg block" type="submit" disabled={loading}>
-            {loading ? 'Logger ind…' : 'Log ind'}
+          {error && (
+            <div style={{ color: 'var(--red)', fontSize: 13.5, marginTop: 10, fontWeight: 600 }}>
+              {error}
+            </div>
+          )}
+          <button
+            className="btn lg block"
+            type="submit"
+            disabled={loading || !password.trim()}
+            style={{ marginTop: 18 }}
+          >
+            {loading ? 'Logger ind…' : 'Log ind →'}
           </button>
         </form>
         <p style={{ marginTop: 24, fontSize: 13, color: 'var(--muted)', textAlign: 'center' }}>

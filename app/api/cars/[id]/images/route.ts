@@ -16,8 +16,8 @@ export async function POST(req: NextRequest, { params }: Ctx) {
   if (!file) return NextResponse.json({ error: 'Ingen fil' }, { status: 400 })
 
   // Upload til Supabase Storage
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim()
+  const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY ?? '').trim()
 
   if (!supabaseUrl || !supabaseKey) {
     // Mock: gem dummy URL til lokal udvikling
