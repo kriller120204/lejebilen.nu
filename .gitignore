@@ -6,6 +6,7 @@ node_modules/
 out/
 
 # Environment variables — MÅ ALDRIG committes
+.env
 .env.local
 .env*.local
 
