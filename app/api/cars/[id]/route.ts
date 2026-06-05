@@ -14,9 +14,14 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
   const { id } = await params
   try {
     const body = await req.json()
-    const car = await db.car.update({ where: { id }, data: body })
+    const { navn, reg_nr, kategori, gear, braendstof, saeder, pris_dag, depositum, km_per_dag, status, beskrivelse } = body
+    const car = await db.car.update({
+      where: { id },
+      data: { navn, reg_nr, kategori, gear, braendstof, saeder: +saeder, pris_dag: +pris_dag, depositum: +depositum, km_per_dag: +km_per_dag, status, beskrivelse },
+    })
     return NextResponse.json(car)
-  } catch {
+  } catch (e) {
+    console.error('PUT /api/cars/[id]:', e)
     return NextResponse.json({ error: 'Update failed' }, { status: 400 })
   }
 }
