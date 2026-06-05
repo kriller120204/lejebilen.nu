@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id                    String    @id @default(uuid())
+  navn                  String
+  email                 String    @unique
+  telefon               String
+  adresse               String?
+  postnr                String?
+  by                    String?
+  koerekort_verificeret Boolean   @default(false)
+  koerekort_url         String?
+  oprettet              DateTime  @default(now())
+  bookings              Booking[]
+
+  @@map("customers")
+}
+
+model Car {
+  id          String      @id @default(uuid())
+  navn        String
+  reg_nr      String      @unique
+  kategori    CarKategori
+  gear        GearType
+  braendstof  BreendstofType
+  saeder      Int         @default(5)
+  pris_dag    Int
+  depositum   Int         @default(3000)
+  km_per_dag  Int         @default(300)
+  status      CarStatus   @default(LEDIG)
+  beskrivelse String?
+  oprettet    DateTime    @default(now())
+  images      CarImage[]
+  bookings    Booking[]
+
+  @@map("cars")
+}
+
+model CarImage {
+  id           String @id @default(uuid())
+  car_id       String
+  car          Car    @relation(fields: [car_id], references: [id], onDelete: Cascade)
+  url          String
+  raekkefoelge Int    @default(0)
+
+  @@map("car_images")
+}
+
+model Booking {
+  id              String         @id @default(uuid())
+  booking_nr      String         @unique
+  customer_id     String
+  customer        Customer       @relation(fields: [customer_id], references: [id])
+  car_id          String
+  car             Car            @relation(fields: [car_id], references: [id])
+  start           DateTime
+  slut            DateTime
+  status          BookingStatus  @default(AFVENTER)
+  total_pris      Int
+  betalingsstatus BetalingStatus @default(AFVENTER)
+  noter           String?
+  oprettet        DateTime       @default(now())
+  extras          BookingExtra[]
+  contract        Contract?
+  payments        Payment[]
+  inspections     Inspection[]
+  damages         Damage[]
+
+  @@map("bookings")
+}
+
+model BookingExtra {
+  id         String    @id @default(uuid())
+  booking_id String
+  booking    Booking   @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+  type       ExtraType
+  pris       Int
+
+  @@map("booking_extras")
+}
+
+model Contract {
+  id           String          @id @default(uuid())
+  booking_id   String          @unique
+  booking      Booking         @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+  pdf_url      String?
+  signeret_af  String?
+  udbyder      SigningProvider @default(PENNEO)
+  signeret_tid DateTime?
+  oprettet     DateTime        @default(now())
+
+  @@map("contracts")
+}
+
+model Payment {
+  id             String        @id @default(uuid())
+  booking_id     String
+  booking        Booking       @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+  beloeb         Int
+  metode         PaymentMethod
+  status         PaymentStatus @default(AFVENTER)
+  transaktion_id String?
+  quickpay_id    String?
+  oprettet       DateTime      @default(now())
+
+  @@map("payments")
+}
+
+model Inspection {
+  id         String         @id @default(uuid())
+  booking_id String
+  booking    Booking        @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+  type       InspectionType
+  km         Int?
+  braendstof Int?
+  billeder   String[]
+  oprettet   DateTime       @default(now())
+
+  @@map("inspections")
+}
+
+model Damage {
+  id          String   @id @default(uuid())
+  booking_id  String
+  booking     Booking  @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+  beskrivelse String
+  billeder    String[]
+  omkostning  Int      @default(0)
+  oprettet    DateTime @default(now())
+
+  @@map("damages")
+}
+
+enum CarKategori {
+  LILLE
+  MELLEMKLASSE
+  STATIONCAR
+  EL
+  VAREBIL
+}
+
+enum GearType {
+  MANUEL
+  AUTOMATIK
+}
+
+enum BreendstofType {
+  BENZIN
+  DIESEL
+  EL
+  HYBRID
+}
+
+enum CarStatus {
+  LEDIG
+  RESERVERET
+  UDLEJET
+  SERVICE
+  UDGAAET
+}
+
+enum BookingStatus {
+  AFVENTER
+  BEKRAEFTET
+  AKTIV
+  UDLEJET
+  AFSLUTTET
+  ANNULLERET
+}
+
+enum BetalingStatus {
+  AFVENTER
+  BETALT
+  DELVIST
+  REFUNDERET
+}
+
+enum ExtraType {
+  CHAUFFOR
+  BARNESTOL
+  SELVRISIKO
+  GPS
+}
+
+enum SigningProvider {
+  MITID
+  PENNEO
+  SCRIVE
+  DROPBOX
+}
+
+enum PaymentMethod {
+  MOBILEPAY
+  KORT
+  KONTANT
+}
+
+enum PaymentStatus {
+  AFVENTER
+  BETALT
+  FEJL
+  REFUNDERET
+}
+
+enum InspectionType {
+  FOER
+  EFTER
+}
