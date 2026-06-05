@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lejebilen.nu — Bil</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.breadcrumb { font-size: 13.5px; color: var(--muted); padding: 22px 0 8px; display:flex; gap:8px; align-items:center; }
+.breadcrumb a:hover { color: var(--ink); }
+.detail { display: grid; grid-template-columns: 1.25fr 1fr; gap: 44px; padding: 16px 0 40px; align-items: start; }
+@media (max-width: 920px){ .detail { grid-template-columns: 1fr; gap: 30px; } }
+
+/* Gallery */
+.gallery image-slot.main { width: 100%; height: 420px; box-shadow: var(--shadow); }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+.thumbs image-slot { width: 100%; height: 86px; cursor: pointer; }
+
+/* Info panel */
+.info-panel { position: sticky; top: 90px; }
+.cat-line { display:flex; align-items:center; gap:10px; }
+.detail h1 { font-size: 38px; margin: 6px 0 4px; }
+.rating { display:flex; align-items:center; gap:7px; font-size:14px; color: var(--ink-soft); font-weight:600; }
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px 0; }
+.spec-box { border: 1px solid var(--line); border-radius: var(--r); padding: 13px 15px; display:flex; align-items:center; gap:12px; background: var(--surface); }
+.spec-box .ic { width:36px;height:36px;border-radius:9px;background:var(--blue-tint);display:grid;place-items:center;color:var(--blue); flex:none; }
+.spec-box .lbl { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight:700; }
+.spec-box .val { font-size: 15px; font-weight: 600; }
+
+.price-card { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; background: var(--surface); box-shadow: var(--shadow); }
+.price-card .pp { display:flex; align-items:baseline; gap:8px; }
+.price-card .pp .amt { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing:-.02em; }
+.price-rows { margin: 16px 0; display:flex; flex-direction:column; gap:10px; }
+.price-rows .pr { display:flex; justify-content:space-between; font-size: 14px; }
+.price-rows .pr .k { color: var(--muted); }
+.price-rows .pr .v { font-weight: 600; }
+
+.terms { margin-top: 28px; }
+.terms h3 { font-size: 18px; margin-bottom: 12px; }
+.terms ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+.terms li { display:flex; gap:11px; font-size: 14px; color: var(--ink-soft); align-items:flex-start; }
+.terms li svg { flex:none; margin-top:2px; color: var(--green); }
+
+/* Availability calendar */
+.avail { margin-top: 40px; }
+.cal { border:1px solid var(--line); border-radius: var(--r-lg); padding: 22px; background: var(--surface); max-width: 380px; }
+.cal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; }
+.cal-head .m { font-family: var(--display); font-weight:700; font-size: 16px; }
+.cal-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:5px; }
+.cal-dow { font-size: 11px; font-weight:700; color: var(--muted); text-align:center; padding: 4px 0; }
+.cal-day { aspect-ratio:1; display:grid; place-items:center; border-radius:8px; font-size:13px; font-weight:600; }
+.cal-day.free { background: var(--green-bg); color: oklch(0.40 0.1 155); }
+.cal-day.res { background: var(--amber-bg); color: oklch(0.46 0.1 70); }
+.cal-day.out { background: var(--red-bg); color: oklch(0.46 0.16 25); }
+.cal-day.empty { background: transparent; }
+.cal-legend { display:flex; gap:16px; margin-top:14px; font-size:12.5px; color: var(--muted); }
+.cal-legend span { display:flex; align-items:center; gap:6px; }
+
+.cta-sticky { display:flex; gap:12px; margin-top: 22px; }
+.deposit-note { font-size:12.5px; color: var(--muted); margin-top:12px; text-align:center; }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a href="index.html" class="brand"><span class="mark"></span>Lejebilen<span style="color:var(--blue)">.nu</span></a>
+    <nav class="nav">
+      <a href="index.html#biler">Biler</a><a href="index.html#how">Sådan virker det</a><a href="index.html#features">Fordele</a><a href="plan.html">Kontakt</a>
+    </nav>
+    <div class="head-cta">
+      <span class="phone"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>47 12 34 56</span>
+      <a href="admin.html" class="btn ghost sm">Admin</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb"><a href="index.html">Forside</a> › <a href="index.html#biler">Biler</a> › <span id="bcName" style="color:var(--ink);font-weight:600">Bil</span></div>
+
+  <div class="detail">
+    <!-- Gallery -->
+    <div class="gallery">
+      <image-slot id="d-main" class="main" shape="rounded" radius="18" placeholder="Hovedbillede af bilen"></image-slot>
+      <div class="thumbs">
+        <image-slot id="d-t1" shape="rounded" radius="10" placeholder="Foto 2"></image-slot>
+        <image-slot id="d-t2" shape="rounded" radius="10" placeholder="Foto 3"></image-slot>
+        <image-slot id="d-t3" shape="rounded" radius="10" placeholder="Interiør"></image-slot>
+        <image-slot id="d-t4" shape="rounded" radius="10" placeholder="Bagagerum"></image-slot>
+      </div>
+
+      <!-- Availability -->
+      <div class="avail">
+        <h2 style="font-size:24px;margin-bottom:6px">Tilgængelighed</h2>
+        <p class="muted" style="margin-bottom:16px;font-size:14px">Juni 2026 — vælg en ledig periode i bookingen.</p>
+        <div class="cal">
+          <div class="cal-head"><span class="m">Juni 2026</span><span class="muted" style="font-size:13px">‹ ›</span></div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span><span class="dot green"></span> Ledig</span>
+            <span><span class="dot amber"></span> Reserveret</span>
+            <span><span class="dot red"></span> Udlejet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="terms">
+        <h3>Vilkår & inkluderet</h3>
+        <ul id="termsList"></ul>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-panel">
+      <div class="cat-line"><span class="badge blue" id="dCat">Kategori</span><span class="rating">★ 4,9 <span class="muted" style="font-weight:500">(312)</span></span></div>
+      <h1 id="dName">Bilnavn</h1>
+      <p class="muted" id="dDesc" style="font-size:15px"></p>
+
+      <div class="spec-grid">
+        <div class="spec-box"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></span><div><div class="lbl">Gear</div><div class="val" id="dGear">—</div></div></div>
+        <div class="spec-box"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v18M3 12h10"/></svg></span><div><div class="lbl">Brændstof</div><div class="val" id="dFuel">—</div></div></div>
+        <div class="spec-box"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><div><div class="lbl">Sæder</div><div class="val" id="dSeats">—</div></div></div>
+        <div class="spec-box"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7M5.5 19a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg></span><div><div class="lbl">Km/dag</div><div class="val">300 km</div></div></div>
+      </div>
+
+      <div class="price-card">
+        <div class="pp"><span class="amt tnum" id="dPrice">0</span><span class="muted" style="font-size:15px">kr./dag</span></div>
+        <div class="price-rows">
+          <div class="pr"><span class="k">2 dage (8.–10. jun)</span><span class="v tnum" id="dDays">0 kr.</span></div>
+          <div class="pr"><span class="k">Forsikring</span><span class="v" style="color:var(--green)">Inkluderet</span></div>
+          <div class="pr"><span class="k">Depositum (reserveres)</span><span class="v tnum">3.000 kr.</span></div>
+        </div>
+        <hr class="hr">
+        <div class="pr" style="display:flex;justify-content:space-between;margin-top:14px"><span style="font-weight:700;font-size:15px">Estimeret i alt</span><span class="v tnum" style="font-family:var(--display);font-weight:800;font-size:20px" id="dTotal">0 kr.</span></div>
+        <div class="cta-sticky">
+          <a class="btn lg block" id="reserveBtn" href="booking.html">Reserver bilen →</a>
+        </div>
+        <div class="deposit-note">Gratis afbestilling indtil 24 timer før afhentning</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="brand"><span class="mark"></span>Lejebilen.nu</div><p style="font-size:14px;max-width:26em">Biludlejning hos Ølstykke Auto. Nem, sikker og professionel biludlejning.</p></div>
+      <div><h4>Biler</h4><ul><li><a href="index.html#biler">Se alle biler</a></li><li><a href="index.html#biler">Varebil</a></li><li><a href="index.html#biler">Elbil</a></li></ul></div>
+      <div><h4>Information</h4><ul><li><a href="index.html#how">Sådan virker det</a></li><li><a href="plan.html">Kontakt</a></li></ul></div>
+      <div><h4>Ølstykke Auto</h4><ul><li>Stationsvej 12</li><li>3650 Ølstykke</li><li>47 12 34 56</li></ul></div>
+    </div>
+    <div class="foot-bot"><span>© 2026 Lejebilen.nu · CVR 12345678</span></div>
+  </div>
+</footer>
+
+<script src="assets/image-slot.js"></script>
+<script>
+const cars = {
+  'vw-polo': {name:'VW Polo', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', seats:'5', price:299, desc:'Kvik og økonomisk bybil — perfekt til byture og daglig pendling. Nem at parkere og med lavt forbrug.'},
+  'toyota-yaris': {name:'Toyota Yaris', cat:'Lille bil', gear:'Automatik', fuel:'Hybrid', seats:'5', price:349, desc:'Hybrid med ekstra lavt brændstofforbrug og blød automatgear. Et roligt og økonomisk valg.'},
+  'ford-fiesta': {name:'Ford Fiesta', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', seats:'5', price:279, desc:'Billig og driftsikker lillebil med vores skarpeste dagspris. Perfekt til den korte tur.'},
+  'vw-golf': {name:'VW Golf', cat:'Mellemklasse', gear:'Automatik', fuel:'Benzin', seats:'5', price:449, desc:'Komfortabel allrounder med god plads — velegnet til både by og længere ture.'},
+  'kia-ceed': {name:'Kia Ceed', cat:'Mellemklasse', gear:'Manuel', fuel:'Benzin', seats:'5', price:429, desc:'Veludstyret mellemklasse med god plads og lavt forbrug. Et solidt allround-valg.'},
+  'skoda-octavia': {name:'Skoda Octavia', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', seats:'5', price:499, desc:'Rummelig stationcar med stort bagagerum. Plads til familie, bagage og sportsudstyr.'},
+  'vw-passat': {name:'VW Passat', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', seats:'5', price:549, desc:'Premium stationcar med masser af plads — ideel til erhverv og længere køreture.'},
+  'tesla-3': {name:'Tesla Model 3', cat:'El', gear:'Automatik', fuel:'El', seats:'5', price:699, desc:'Elbil med lang rækkevidde og hurtig opladning. Inkl. adgang til ladenetværk.'},
+  'vw-transporter': {name:'VW Transporter', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:'3', price:599, desc:'Stor varebil — ideel til flytning og transport af møbler eller materialer.'},
+  'ford-transit': {name:'Ford Transit', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:'3', price:649, desc:'Rummelig kassevogn med højt tag og masser af lastplads til håndværk og flytning.'},
+  'renault-master': {name:'Renault Master', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:'3', price:749, desc:'Vores største varebil — til store flytninger, paller og volumengods.'},
+};
+const id = new URLSearchParams(location.search).get('car') || 'vw-polo';
+const c = cars[id] || cars['vw-polo'];
+const days = 2;
+document.getElementById('bcName').textContent = c.name;
+document.getElementById('dName').textContent = c.name;
+document.getElementById('dCat').textContent = c.cat;
+document.getElementById('dDesc').textContent = c.desc;
+document.getElementById('dGear').textContent = c.gear;
+document.getElementById('dFuel').textContent = c.fuel;
+document.getElementById('dSeats').textContent = c.seats + ' personer';
+document.getElementById('dPrice').textContent = c.price;
+document.getElementById('dDays').textContent = (c.price*days).toLocaleString('da-DK') + ' kr.';
+document.getElementById('dTotal').textContent = (c.price*days).toLocaleString('da-DK') + ' kr.';
+document.getElementById('reserveBtn').href = 'booking.html?car=' + id;
+document.getElementById('d-main').setAttribute('placeholder', c.name + ' — hovedbillede');
+document.title = 'Lejebilen.nu — ' + c.name;
+
+document.getElementById('termsList').innerHTML = [
+  'Forsikring med selvrisiko 3.000 kr. (kan reduceres)',
+  '300 fri km pr. dag — derefter 1,50 kr./km',
+  'Min. 21 år og gyldigt kørekort i 1 år',
+  'Depositum 3.000 kr. reserveres på kortet',
+  'Bilen leveres fuldt tanket og rengjort',
+].map(t => `<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>${t}</li>`).join('');
+
+// Calendar — June 2026 (starts Monday). 1 Jun 2026 is a Monday.
+const states = {}; // day -> state
+[6,7,12,13,14,20,21].forEach(d=>states[d]='res');
+[16,17,18,27,28].forEach(d=>states[d]='out');
+let cal = '';
+['M','T','O','T','F','L','S'].forEach(d => cal += `<div class="cal-dow">${d}</div>`);
+for(let d=1; d<=30; d++){
+  const st = states[d] || 'free';
+  cal += `<div class="cal-day ${st}">${d}</div>`;
+}
+document.getElementById('calGrid').innerHTML = cal;
+</script>
+</body>
+</html>

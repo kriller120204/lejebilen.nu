@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lejebilen.nu — Admin · Dashboard</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.dash-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 22px; margin-top: 24px; align-items: start; }
+@media (max-width: 1040px){ .dash-grid { grid-template-columns: 1fr; } }
+
+/* revenue chart */
+.chart { display: flex; align-items: flex-end; gap: 12px; height: 180px; padding: 18px 20px 0; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.bar { width: 100%; max-width: 30px; border-radius: 6px 6px 0 0; background: var(--blue-tint2); transition: height .3s; }
+.bar.hi { background: var(--blue); }
+.bar-col .bl { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+.mini-list { display: flex; flex-direction: column; }
+.mini-row { display: flex; align-items: center; gap: 13px; padding: 13px 20px; border-bottom: 1px solid var(--line); }
+.mini-row:last-child { border-bottom: 0; }
+.mini-row .av { width: 38px; height: 38px; border-radius: 9px; background: var(--blue-tint); color: var(--blue-700); display: grid; place-items: center; font-weight: 700; font-size: 13px; flex: none; }
+.mini-row .nm { font-weight: 600; font-size: 14px; }
+.mini-row .meta { font-size: 12.5px; color: var(--muted); }
+.mini-row .when { margin-left: auto; font-size: 12.5px; color: var(--muted); text-align: right; white-space: nowrap; }
+
+.fleet-row { display:flex; align-items:center; gap:12px; padding:12px 20px; border-bottom:1px solid var(--line); }
+.fleet-row:last-child{border-bottom:0;}
+.fleet-row .fn { font-weight:600; font-size:14px; }
+.fleet-row .fr { font-size:12px; color:var(--muted); font-family:var(--mono); }
+</style>
+</head>
+<body>
+
+<div class="admin">
+  <!-- Sidebar -->
+  <aside class="aside">
+    <a href="index.html" class="brand"><span class="mark"></span>Lejebilen<span style="color:var(--blue)">.nu</span></a>
+    <nav class="a-nav">
+      <div class="sec-lbl">Drift</div>
+      <a href="admin.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+      <a href="admin-bookinger.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Bookinger</a>
+      <a href="admin-biler.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3v-5l2-5h14l2 5v5h-2M5 17a2 2 0 1 0 4 0M15 17a2 2 0 1 0 4 0M9 17h6"/></svg>Biler</a>
+      <a href="admin-kunder.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Kunder</a>
+      <div class="sec-lbl">Administration</div>
+      <a href="admin-bookinger.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Dokumenter</a>
+      <a href="plan.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1l-.4-2.5H9.6L9.2 5a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.5h4.8l.4-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6a7 7 0 0 0 .1-1z"/></svg>Indstillinger</a>
+    </nav>
+    <div class="a-user">
+      <div class="av">MK</div>
+      <div><div class="nm">Morten K.</div><div class="rl">Ølstykke Auto</div></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="amain">
+    <header class="atop">
+      <div>
+        <div class="crumb">Drift</div>
+        <h1>Dashboard</h1>
+      </div>
+      <div class="atop-right">
+        <div class="asearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Søg booking, bil eller kunde…"></div>
+        <button class="icon-btn"><span class="ping"></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <a href="admin-bookinger.html" class="btn sm">+ Ny booking</a>
+      </div>
+    </header>
+
+    <div class="acontent">
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="top"><span class="ic" style="background:var(--blue-tint);color:var(--blue)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="badge green">Aktiv</span></div>
+          <div class="lbl">Aktive bookinger</div>
+          <div class="val tnum">8</div>
+          <div class="delta up">▲ 2 siden i går</div>
+        </div>
+        <div class="kpi">
+          <div class="top"><span class="ic" style="background:var(--amber-bg);color:oklch(0.6 0.12 70)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span></div>
+          <div class="lbl">Kommende bookinger</div>
+          <div class="val tnum">14</div>
+          <div class="delta up">▲ næste 7 dage</div>
+        </div>
+        <div class="kpi">
+          <div class="top"><span class="ic" style="background:var(--green-bg);color:oklch(0.5 0.12 155)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3v-5l2-5h14l2 5v5h-2M5 17a2 2 0 1 0 4 0M15 17a2 2 0 1 0 4 0"/></svg></span></div>
+          <div class="lbl">Ledige biler</div>
+          <div class="val tnum">7 <span style="font-size:18px;color:var(--muted)">/ 11</span></div>
+          <div class="delta">2 udlejet · 2 reserveret</div>
+        </div>
+        <div class="kpi">
+          <div class="top"><span class="ic" style="background:var(--blue-tint);color:var(--blue)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="badge green">+12%</span></div>
+          <div class="lbl">Omsætning (juni)</div>
+          <div class="val tnum">48.200 <span style="font-size:18px;color:var(--muted)">kr.</span></div>
+          <div class="delta up">▲ 12% vs. maj</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Revenue + bookings -->
+        <div class="col gap-20">
+          <div class="panel-card">
+            <div class="ph-head"><h3>Omsætning · seneste 7 dage</h3><span class="badge blue">12.840 kr.</span></div>
+            <div class="chart">
+              <div class="bar-col"><div class="bar" style="height:42%"></div><span class="bl">Ma</span></div>
+              <div class="bar-col"><div class="bar" style="height:58%"></div><span class="bl">Ti</span></div>
+              <div class="bar-col"><div class="bar" style="height:35%"></div><span class="bl">On</span></div>
+              <div class="bar-col"><div class="bar" style="height:70%"></div><span class="bl">To</span></div>
+              <div class="bar-col"><div class="bar hi" style="height:92%"></div><span class="bl">Fr</span></div>
+              <div class="bar-col"><div class="bar hi" style="height:80%"></div><span class="bl">Lø</span></div>
+              <div class="bar-col"><div class="bar" style="height:48%"></div><span class="bl">Sø</span></div>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="ph-head"><h3>Seneste bookinger</h3><a href="admin-bookinger.html" class="muted" style="font-size:13px;font-weight:600">Se alle →</a></div>
+            <div style="overflow-x:auto">
+            <table class="atable">
+              <thead><tr><th>Booking</th><th>Kunde</th><th>Bil</th><th>Periode</th><th>Betaling</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="mono" style="font-size:13px">#LB-0463</td><td>Anna Sørensen</td><td>VW Polo</td><td class="muted">8.–10. jun</td><td><span class="badge green">Betalt</span></td><td><span class="badge blue"><span class="dot" style="background:var(--blue)"></span>Bekræftet</span></td></tr>
+                <tr><td class="mono" style="font-size:13px">#LB-0462</td><td>Jens Holm</td><td>VW Transporter</td><td class="muted">6.–7. jun</td><td><span class="badge green">Betalt</span></td><td><span class="badge amber">Udlejet</span></td></tr>
+                <tr><td class="mono" style="font-size:13px">#LB-0461</td><td>Mette Vinter</td><td>Tesla Model 3</td><td class="muted">9.–12. jun</td><td><span class="badge amber">Afventer</span></td><td><span class="badge blue">Bekræftet</span></td></tr>
+                <tr><td class="mono" style="font-size:13px">#LB-0460</td><td>Peter Lund</td><td>Skoda Octavia</td><td class="muted">5.–6. jun</td><td><span class="badge green">Betalt</span></td><td><span class="badge green">Afsluttet</span></td></tr>
+                <tr><td class="mono" style="font-size:13px">#LB-0459</td><td>Sofie Berg</td><td>Toyota Yaris</td><td class="muted">11.–14. jun</td><td><span class="badge green">Betalt</span></td><td><span class="badge blue">Bekræftet</span></td></tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="col gap-20">
+          <div class="panel-card">
+            <div class="ph-head"><h3>I dag</h3><span class="muted" style="font-size:13px">5. juni</span></div>
+            <div class="mini-list">
+              <div class="mini-row"><span class="av" style="background:var(--green-bg);color:oklch(0.45 0.12 155)">↑</span><div><div class="nm">Afhentning · Jens Holm</div><div class="meta">VW Transporter · #LB-0462</div></div><span class="when">kl. 08:00</span></div>
+              <div class="mini-row"><span class="av" style="background:var(--green-bg);color:oklch(0.45 0.12 155)">↑</span><div><div class="nm">Afhentning · Sofie Berg</div><div class="meta">Toyota Yaris · #LB-0459</div></div><span class="when">kl. 10:30</span></div>
+              <div class="mini-row"><span class="av" style="background:var(--amber-bg);color:oklch(0.5 0.1 70)">↓</span><div><div class="nm">Aflevering · Peter Lund</div><div class="meta">Skoda Octavia · #LB-0460</div></div><span class="when">kl. 16:00</span></div>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="ph-head"><h3>Flådestatus</h3><a href="admin-biler.html" class="muted" style="font-size:13px;font-weight:600">Administrer →</a></div>
+            <div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">VW Polo</div><div class="fr">AB 12 345</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">Toyota Yaris</div><div class="fr">CD 23 456</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">Ford Fiesta</div><div class="fr">EF 34 567</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">VW Golf</div><div class="fr">GH 45 678</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">Kia Ceed</div><div class="fr">IJ 56 789</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot amber"></span><div style="flex:1"><div class="fn">Skoda Octavia</div><div class="fr">KL 67 890</div></div><span class="badge amber">Reserveret</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">VW Passat</div><div class="fr">MN 78 901</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot red"></span><div style="flex:1"><div class="fn">Tesla Model 3</div><div class="fr">OP 89 012</div></div><span class="badge red">Udlejet</span></div>
+              <div class="fleet-row"><span class="dot red"></span><div style="flex:1"><div class="fn">VW Transporter</div><div class="fr">QR 90 123</div></div><span class="badge red">Udlejet</span></div>
+              <div class="fleet-row"><span class="dot green"></span><div style="flex:1"><div class="fn">Ford Transit</div><div class="fr">ST 01 234</div></div><span class="badge green">Ledig</span></div>
+              <div class="fleet-row"><span class="dot amber"></span><div style="flex:1"><div class="fn">Renault Master</div><div class="fr">UV 12 345</div></div><span class="badge amber">Reserveret</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

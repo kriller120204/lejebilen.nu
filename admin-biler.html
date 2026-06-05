@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lejebilen.nu — Admin · Biler</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.fleet-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+@media (max-width:1100px){ .fleet-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:680px){ .fleet-grid { grid-template-columns:1fr; } }
+.fcard { background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--shadow-sm); }
+.fcard .media { position:relative; }
+.fcard image-slot { width:100%; height:150px; border-radius:0; }
+.fcard .st-tag { position:absolute; top:10px; left:10px; }
+.fcard .body { padding:16px; }
+.fcard .ftop { display:flex; justify-content:space-between; align-items:flex-start; }
+.fcard h3 { font-size:18px; }
+.fcard .reg { font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:2px; }
+.fcard .fmeta { display:flex; gap:8px; margin:13px 0; flex-wrap:wrap; }
+.fcard .fprice { font-family:var(--display); font-weight:800; font-size:18px; }
+.fcard .factions { display:flex; gap:8px; margin-top:14px; }
+
+/* Drawer (no transition — preview-safe) */
+.drawer-back { position:fixed; inset:0; background:rgba(16,32,58,.4); opacity:0; pointer-events:none; z-index:60; }
+.drawer-back.open { opacity:1; pointer-events:auto; }
+.drawer { position:fixed; top:0; right:0; bottom:0; width:480px; max-width:94vw; background:var(--surface); box-shadow:var(--shadow-lg); transform:translateX(100%); z-index:61; overflow-y:auto; }
+.drawer.open { transform:none; }
+.dr-head { padding:22px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--surface); z-index:2; }
+.dr-body { padding:24px; }
+.close-x { width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--ink-soft); }
+.upimg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px; }
+.upimg-grid image-slot { width:100%; height:74px; }
+.toggle-row { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border:1px solid var(--line); border-radius:var(--r); background:var(--bg-2); }
+.switch { width:46px; height:27px; border-radius:999px; background:var(--line-2); position:relative; cursor:pointer; transition:none; flex:none; }
+.switch.on { background:var(--green); }
+.switch .knob { position:absolute; top:3px; left:3px; width:21px; height:21px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.switch.on .knob { left:22px; }
+</style>
+</head>
+<body>
+
+<div class="admin">
+  <aside class="aside">
+    <a href="index.html" class="brand"><span class="mark"></span>Lejebilen<span style="color:var(--blue)">.nu</span></a>
+    <nav class="a-nav">
+      <div class="sec-lbl">Drift</div>
+      <a href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+      <a href="admin-bookinger.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Bookinger</a>
+      <a href="admin-biler.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3v-5l2-5h14l2 5v5h-2M5 17a2 2 0 1 0 4 0M15 17a2 2 0 1 0 4 0M9 17h6"/></svg>Biler</a>
+      <a href="admin-kunder.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Kunder</a>
+      <div class="sec-lbl">Administration</div>
+      <a href="admin-bookinger.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Dokumenter</a>
+      <a href="plan.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1l-.4-2.5H9.6L9.2 5a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.5h4.8l.4-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6a7 7 0 0 0 .1-1z"/></svg>Indstillinger</a>
+    </nav>
+    <div class="a-user"><div class="av">MK</div><div><div class="nm">Morten K.</div><div class="rl">Ølstykke Auto</div></div></div>
+  </aside>
+
+  <div class="amain">
+    <header class="atop">
+      <div><div class="crumb">Drift</div><h1>Biler</h1></div>
+      <div class="atop-right">
+        <div class="asearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Søg bil eller reg.nr…"></div>
+        <button class="btn sm" onclick="openCar('Ny bil','')">+ Opret bil</button>
+      </div>
+    </header>
+
+    <div class="acontent">
+      <div class="fleet-grid" id="fleetGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit drawer -->
+<div class="drawer-back" id="drBack" onclick="closeCar()"></div>
+<aside class="drawer" id="drawer">
+  <div class="dr-head">
+    <h2 style="font-size:21px" id="carTitle">Rediger bil</h2>
+    <button class="close-x" onclick="closeCar()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="dr-body">
+    <div class="col gap-20">
+      <div>
+        <label style="font-size:13.5px;font-weight:600;color:var(--ink-soft)">Billeder</label>
+        <div class="upimg-grid">
+          <image-slot id="ed-1" placeholder="Foto 1"></image-slot>
+          <image-slot id="ed-2" placeholder="Foto 2"></image-slot>
+          <image-slot id="ed-3" placeholder="+ Tilføj"></image-slot>
+        </div>
+      </div>
+      <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="field" style="grid-column:1/-1"><label>Bilnavn</label><input class="input" id="edName" placeholder="VW Polo"></div>
+        <div class="field"><label>Registreringsnr.</label><input class="input" id="edReg" placeholder="AB 12 345"></div>
+        <div class="field"><label>Kategori</label><select class="input"><option>Lille bil</option><option>Mellemklasse</option><option>Stationcar</option><option>Varebil</option><option>El</option></select></div>
+        <div class="field"><label>Gear</label><select class="input"><option>Manuel</option><option>Automatik</option></select></div>
+        <div class="field"><label>Brændstof</label><select class="input"><option>Benzin</option><option>Diesel</option><option>Hybrid</option><option>El</option></select></div>
+        <div class="field"><label>Sæder</label><input class="input" type="number" value="5"></div>
+        <div class="field"><label>Pris pr. dag (kr.)</label><input class="input" id="edPrice" type="number" placeholder="299"></div>
+        <div class="field" style="grid-column:1/-1"><label>Beskrivelse</label><textarea class="input" rows="3" placeholder="Kort beskrivelse af bilen…"></textarea></div>
+      </div>
+      <div class="toggle-row">
+        <div><div style="font-weight:600;font-size:14.5px">Tilgængelig for booking</div><div class="muted" style="font-size:13px">Slå fra for at markere bilen som utilgængelig</div></div>
+        <div class="switch on" id="availSwitch" onclick="this.classList.toggle('on')"><span class="knob"></span></div>
+      </div>
+      <div class="row gap-12">
+        <button class="btn block" onclick="closeCar()">Gem bil</button>
+        <button class="btn ghost" onclick="closeCar()">Annullér</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script src="assets/image-slot.js"></script>
+<script>
+const fleet = [
+  {id:'vw-polo', name:'VW Polo', reg:'AB 12 345', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', price:299, status:'free'},
+  {id:'toyota-yaris', name:'Toyota Yaris', reg:'CD 23 456', cat:'Lille bil', gear:'Automatik', fuel:'Hybrid', price:349, status:'free'},
+  {id:'ford-fiesta', name:'Ford Fiesta', reg:'EF 34 567', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', price:279, status:'free'},
+  {id:'vw-golf', name:'VW Golf', reg:'GH 45 678', cat:'Mellemklasse', gear:'Automatik', fuel:'Benzin', price:449, status:'free'},
+  {id:'kia-ceed', name:'Kia Ceed', reg:'IJ 56 789', cat:'Mellemklasse', gear:'Manuel', fuel:'Benzin', price:429, status:'free'},
+  {id:'skoda-octavia', name:'Skoda Octavia', reg:'KL 67 890', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', price:499, status:'res'},
+  {id:'vw-passat', name:'VW Passat', reg:'MN 78 901', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', price:549, status:'free'},
+  {id:'tesla-3', name:'Tesla Model 3', reg:'OP 89 012', cat:'El', gear:'Automatik', fuel:'El', price:699, status:'out'},
+  {id:'vw-transporter', name:'VW Transporter', reg:'QR 90 123', cat:'Varebil', gear:'Manuel', fuel:'Diesel', price:599, status:'out'},
+  {id:'ford-transit', name:'Ford Transit', reg:'ST 01 234', cat:'Varebil', gear:'Manuel', fuel:'Diesel', price:649, status:'free'},
+  {id:'renault-master', name:'Renault Master', reg:'UV 12 345', cat:'Varebil', gear:'Manuel', fuel:'Diesel', price:749, status:'res'},
+];
+const stMap = {free:['green','Ledig'], res:['amber','Reserveret'], out:['red','Udlejet']};
+document.getElementById('fleetGrid').innerHTML = fleet.map(c=>{
+  const [cls,lbl]=stMap[c.status];
+  return `<div class="fcard">
+    <div class="media">
+      <image-slot id="fl-${c.id}" shape="rect" placeholder="${c.name}"></image-slot>
+      <span class="badge ${cls} st-tag">${lbl}</span>
+    </div>
+    <div class="body">
+      <div class="ftop"><div><h3>${c.name}</h3><div class="reg">${c.reg}</div></div><span class="chip">${c.cat}</span></div>
+      <div class="fmeta"><span class="chip">${c.gear}</span><span class="chip">${c.fuel}</span></div>
+      <div class="row between center" style="white-space:nowrap"><div><span class="fprice">${c.price} kr.</span> <span class="muted" style="font-size:12px">/dag</span></div></div>
+      <div class="factions">
+        <button class="btn sm ghost" style="flex:1" onclick='openCar("Rediger bil", ${JSON.stringify(c).replace(/'/g,"&#39;")})'>Rediger</button>
+        <button class="btn sm ghost" onclick="alert('Markér utilgængelig')">⋯</button>
+      </div>
+    </div>
+  </div>`;
+}).join('');
+
+function openCar(title, c){
+  document.getElementById('carTitle').textContent = title;
+  document.getElementById('edName').value = c && c.name || '';
+  document.getElementById('edReg').value = c && c.reg || '';
+  document.getElementById('edPrice').value = c && c.price || '';
+  const sw = document.getElementById('availSwitch');
+  if(c && c.status==='out') sw.classList.remove('on'); else sw.classList.add('on');
+  const dr=document.getElementById('drawer'), bk=document.getElementById('drBack');
+  dr.classList.add('open'); bk.classList.add('open');
+}
+function closeCar(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drBack').classList.remove('open');
+}
+</script>
+</body>
+</html>

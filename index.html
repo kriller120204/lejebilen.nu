@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lejebilen.nu — Lej en bil hurtigt og nemt</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+/* ---------- Header ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,.82); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+.brand { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.brand .mark {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(150deg, var(--blue), var(--navy-deep));
+  display: grid; place-items: center; color: #fff; font-size: 17px; font-weight: 800;
+  box-shadow: var(--shadow-sm);
+}
+.brand .mark::after { content: "L"; }
+.nav { display: flex; align-items: center; gap: 30px; }
+.nav a { font-size: 14.5px; font-weight: 500; color: var(--ink-soft); transition: color .15s; }
+.nav a:hover { color: var(--ink); }
+.head-cta { display: flex; align-items: center; gap: 14px; }
+.phone { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14.5px; color: var(--ink); }
+@media (max-width: 900px){ .nav, .phone { display: none; } }
+
+/* ---------- Hero ---------- */
+.hero { padding: 64px 0 0; position: relative; overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 52px; align-items: center; }
+.hero h1 { font-size: clamp(38px, 5vw, 60px); font-weight: 800; }
+.hero h1 .accent { color: var(--blue); }
+.hero .lead { font-size: 19px; color: var(--muted); margin-top: 20px; max-width: 30em; }
+.hero-trust { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.hero-img { position: relative; }
+.hero-img image-slot { width: 100%; height: 420px; box-shadow: var(--shadow-lg); }
+.float-badge {
+  position: absolute; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px; box-shadow: var(--shadow-lg); padding: 13px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.float-badge .ico { width: 38px; height: 38px; border-radius: 10px; display:grid; place-items:center; }
+.fb-1 { left: -22px; bottom: 46px; }
+.fb-2 { right: -16px; top: 40px; }
+
+/* ---------- Search box ---------- */
+.searchbox {
+  margin: 46px auto 0; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg); padding: 12px;
+  display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 4px; align-items: stretch;
+  position: relative; z-index: 5;
+}
+.sb-field { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border-radius: 14px; transition: background .15s; }
+.sb-field + .sb-field { border-left: 1px solid var(--line); }
+.sb-field:hover { background: var(--bg-2); }
+.sb-field label { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sb-field input { border: 0; background: transparent; font-family: var(--font); font-size: 15.5px; font-weight: 600; color: var(--ink); padding: 0; }
+.sb-field input:focus { outline: none; }
+.searchbox .btn { align-self: stretch; }
+@media (max-width: 920px){
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero-img image-slot { height: 300px; }
+  .float-badge { display: none; }
+  .searchbox { grid-template-columns: 1fr 1fr; }
+  .sb-field:nth-child(odd) { border-left: 0; }
+  .searchbox .btn { grid-column: 1 / -1; }
+}
+
+/* ---------- Section ---------- */
+section { padding: 76px 0; }
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+.sec-head h2 { font-size: clamp(28px, 3.4vw, 38px); }
+.sec-head p { color: var(--muted); margin-top: 10px; }
+.filters { display: flex; gap: 9px; flex-wrap: wrap; }
+.filter { font-size: 13.5px; font-weight: 600; padding: 8px 15px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-soft); transition: all .15s; }
+.filter:hover { border-color: var(--faint); }
+.filter.active { background: var(--navy-deep); color: #fff; border-color: var(--navy-deep); }
+
+/* ---------- Car grid ---------- */
+.car-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 940px){ .car-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px){ .car-grid { grid-template-columns: 1fr; } }
+.car-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  overflow: hidden; box-shadow: var(--shadow-sm); transition: transform .18s, box-shadow .18s, border-color .18s;
+  display: flex; flex-direction: column;
+}
+.car-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--line-2); }
+.car-card .media { position: relative; }
+.car-card image-slot { width: 100%; height: 188px; border-radius: 0; }
+.car-card .tag { position: absolute; top: 12px; left: 12px; }
+.car-card .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 13px; flex: 1; }
+.car-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.car-top h3 { font-size: 20px; }
+.car-cat { font-size: 12.5px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+.specs { display: flex; flex-wrap: wrap; gap: 7px; }
+.spec { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-soft); background: var(--bg-2); border: 1px solid var(--line); padding: 5px 9px; border-radius: 8px; font-weight: 500; }
+.car-desc { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+.car-foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-top: 6px; }
+.price .amt { font-family: var(--display); font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.price .per { font-size: 12.5px; color: var(--muted); }
+.price .from { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+
+/* ---------- How it works ---------- */
+.how { background: var(--navy-deep); color: #fff; border-radius: 0; }
+.how .eyebrow { color: oklch(0.78 0.1 256); }
+.how h2 { color: #fff; }
+.how .sec-head p { color: rgba(255,255,255,.6); }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 860px){ .steps { grid-template-columns: repeat(2, 1fr); } }
+.step { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--r-lg); padding: 26px 22px; }
+.step .n { font-family: var(--display); font-size: 13px; font-weight: 700; color: oklch(0.78 0.1 256); letter-spacing: .1em; }
+.step h3 { color: #fff; font-size: 19px; margin: 14px 0 8px; }
+.step p { font-size: 14px; color: rgba(255,255,255,.62); }
+
+/* ---------- Features ---------- */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 860px){ .feat-grid { grid-template-columns: 1fr; } }
+.feat { padding: 24px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+.feat .ico { width: 44px; height: 44px; border-radius: 12px; background: var(--blue-tint); display:grid; place-items:center; margin-bottom: 16px; }
+.feat h3 { font-size: 17.5px; margin-bottom: 7px; }
+.feat p { font-size: 14px; color: var(--muted); }
+
+/* ---------- CTA band ---------- */
+.cta-band { background: linear-gradient(135deg, var(--blue-700), var(--navy-deep)); color: #fff; border-radius: var(--r-xl); padding: 54px 48px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.cta-band h2 { color: #fff; font-size: 32px; }
+.cta-band p { color: rgba(255,255,255,.7); margin-top: 10px; }
+@media (max-width: 760px){ .cta-band { flex-direction: column; text-align: center; padding: 40px 26px; } }
+
+/* ---------- Footer ---------- */
+.site-foot { background: var(--navy-900); color: rgba(255,255,255,.7); padding: 56px 0 30px; margin-top: 20px; }
+.foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 36px; }
+@media (max-width: 760px){ .foot-grid { grid-template-columns: 1fr 1fr; gap: 28px; } }
+.site-foot .brand { color: #fff; margin-bottom: 14px; }
+.site-foot h4 { color: #fff; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; font-weight: 700; }
+.site-foot ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+.site-foot a { font-size: 14px; transition: color .15s; }
+.site-foot a:hover { color: #fff; }
+.foot-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.1); font-size: 13px; color: rgba(255,255,255,.5); }
+.pay-row { display: flex; gap: 8px; align-items: center; }
+.pay-chip { font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); letter-spacing: .02em; }
+
+.ico svg { display:block; }
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="site-head">
+  <div class="wrap">
+    <a href="index.html" class="brand"><span class="mark"></span>Lejebilen<span style="color:var(--blue)">.nu</span></a>
+    <nav class="nav">
+      <a href="#biler">Biler</a>
+      <a href="#how">Sådan virker det</a>
+      <a href="#features">Fordele</a>
+      <a href="plan.html">Kontakt</a>
+    </nav>
+    <div class="head-cta">
+      <span class="phone">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        47 12 34 56
+      </span>
+      <a href="admin.html" class="btn ghost sm">Admin</a>
+      <a href="#biler" class="btn sm">Se biler</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">Ølstykke Auto · Biludlejning</span>
+        <h1 style="margin-top:16px">Lej en bil <span class="accent">hurtigt og nemt</span></h1>
+        <p class="lead">Vælg bil, reserver online og hent den samme dag. Digital kontrakt, sikker betaling og ingen skjulte gebyrer.</p>
+        <div class="hero-trust">
+          <span class="chip"><span class="dot green"></span> Hent samme dag</span>
+          <span class="chip">✶ Digital underskrift</span>
+          <span class="chip">Betal med MobilePay</span>
+          <span class="chip">Fri afbestilling</span>
+        </div>
+      </div>
+      <div class="hero-img">
+        <image-slot id="hero" shape="rounded" radius="22" placeholder="Stort billede af biler — hero"></image-slot>
+        <div class="float-badge fb-1">
+          <span class="ico" style="background:var(--green-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.14 155)" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <div><div style="font-weight:700;font-size:14px">Klar på 3 min.</div><div style="font-size:12px;color:var(--muted)">Book & underskriv online</div></div>
+        </div>
+        <div class="float-badge fb-2">
+          <span class="ico" style="background:var(--blue-tint)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></span>
+          <div><div style="font-weight:700;font-size:14px">4,9 / 5</div><div style="font-size:12px;color:var(--muted)">312 anmeldelser</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search box -->
+    <form class="searchbox" onsubmit="event.preventDefault(); document.getElementById('biler').scrollIntoView({behavior:'smooth'});">
+      <div class="sb-field">
+        <label>Afhentningsdato</label>
+        <input type="date" value="2026-06-08">
+      </div>
+      <div class="sb-field">
+        <label>Tidspunkt</label>
+        <input type="time" value="09:00">
+      </div>
+      <div class="sb-field">
+        <label>Afleveringsdato</label>
+        <input type="date" value="2026-06-10">
+      </div>
+      <div class="sb-field">
+        <label>Tidspunkt</label>
+        <input type="time" value="09:00">
+      </div>
+      <button class="btn lg" type="submit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        Se ledige biler
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Cars ===== -->
+<section id="biler">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Vores flåde</span>
+        <h2 style="margin-top:10px">Ledige biler i Ølstykke</h2>
+        <p>11 biler i flåden — 8 personbiler og 3 varebiler. Alle priser inkl. forsikring og 300 km/dag.</p>
+      </div>
+      <div class="filters">
+        <button class="filter active">Alle</button>
+        <button class="filter">Lille bil</button>
+        <button class="filter">Mellemklasse</button>
+        <button class="filter">Stationcar</button>
+        <button class="filter">Varebil</button>
+        <button class="filter">El</button>
+      </div>
+    </div>
+    <div class="car-grid" id="carGrid"></div>
+  </div>
+</section>
+
+<!-- ===== How it works ===== -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:42px">
+      <div>
+        <span class="eyebrow">Sådan virker det</span>
+        <h2 style="margin-top:10px">Fra booking til bilnøgle på 4 trin</h2>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Vælg bil & periode</h3><p>Find en ledig bil, vælg dato og tidspunkt for afhentning og aflevering.</p></div>
+      <div class="step"><div class="n">02</div><h3>Udfyld & underskriv</h3><p>Indtast dine oplysninger og underskriv lejekontrakten digitalt med NemID/MitID.</p></div>
+      <div class="step"><div class="n">03</div><h3>Betal sikkert</h3><p>Betal med MobilePay, kort eller Nets. Depositum reserveres automatisk.</p></div>
+      <div class="step"><div class="n">04</div><h3>Hent bilen</h3><p>Mød op hos Ølstykke Auto med dit kørekort — så er du klar til at køre.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Features ===== -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Hvorfor Lejebilen.nu</span>
+        <h2 style="margin-top:10px">Nem, sikker og professionel biludlejning</h2>
+      </div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span>
+        <h3>Digital check-in</h3>
+        <p>Upload kørekort hjemmefra og spar tid ved afhentning. Alt er klar, når du ankommer.</p>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <h3>Fuld forsikring</h3>
+        <p>Alle biler er kaskoforsikrede. Tilkøb selvrisikoreduktion og kør helt uden bekymringer.</p>
+      </div>
+      <div class="feat">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+        <h3>Lokal og personlig</h3>
+        <p>Hentes hos Ølstykke Auto. Ringer du, taler du med os — ikke et callcenter.</p>
+      </div>
+    </div>
+
+    <div class="cta-band" style="margin-top:48px">
+      <div>
+        <span class="eyebrow" style="color:oklch(0.82 0.08 256)">Klar til at køre?</span>
+        <h2 style="margin-top:8px">Reserver din bil i dag</h2>
+        <p>Book online nu og hent bilen samme dag hos Ølstykke Auto.</p>
+      </div>
+      <a href="#biler" class="btn lg" style="background:#fff;color:var(--navy-deep)">Se ledige biler →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand"><span class="mark"></span>Lejebilen.nu</div>
+        <p style="font-size:14px;max-width:26em">Biludlejning hos Ølstykke Auto. Nem, sikker og professionel biludlejning til private og erhverv.</p>
+        <div class="pay-row" style="margin-top:18px">
+          <span class="pay-chip">MobilePay</span>
+          <span class="pay-chip">Visa</span>
+          <span class="pay-chip">Mastercard</span>
+          <span class="pay-chip">Nets</span>
+        </div>
+      </div>
+      <div>
+        <h4>Biler</h4>
+        <ul><li><a href="#biler">Lille bil</a></li><li><a href="#biler">Mellemklasse</a></li><li><a href="#biler">Stationcar</a></li><li><a href="#biler">Varebil</a></li><li><a href="#biler">Elbil</a></li></ul>
+      </div>
+      <div>
+        <h4>Information</h4>
+        <ul><li><a href="#how">Sådan virker det</a></li><li><a href="bil.html">Priser & vilkår</a></li><li><a href="#features">Forsikring</a></li><li><a href="plan.html">Kontakt</a></li></ul>
+      </div>
+      <div>
+        <h4>Ølstykke Auto</h4>
+        <ul><li>Stationsvej 12</li><li>3650 Ølstykke</li><li>47 12 34 56</li><li>book@lejebilen.nu</li></ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Lejebilen.nu · CVR 12345678</span>
+      <span class="row gap-16"><a href="#">Handelsbetingelser</a><a href="#">Privatlivspolitik</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/image-slot.js"></script>
+<script>
+const cars = [
+  { id:'vw-polo', name:'VW Polo', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', seats:5, price:299, tag:'Populær', tagClass:'blue', desc:'Kvik og økonomisk bybil — perfekt til byture og pendling.' },
+  { id:'toyota-yaris', name:'Toyota Yaris', cat:'Lille bil', gear:'Automatik', fuel:'Hybrid', seats:5, price:349, tag:'Lavt forbrug', tagClass:'green', desc:'Hybrid med ekstra lavt brændstofforbrug og nem automatgear.' },
+  { id:'ford-fiesta', name:'Ford Fiesta', cat:'Lille bil', gear:'Manuel', fuel:'Benzin', seats:5, price:279, desc:'Billig og driftsikker lillebil — vores skarpeste dagspris.' },
+  { id:'vw-golf', name:'VW Golf', cat:'Mellemklasse', gear:'Automatik', fuel:'Benzin', seats:5, price:449, desc:'Komfortabel allrounder til både by og længere ture.' },
+  { id:'kia-ceed', name:'Kia Ceed', cat:'Mellemklasse', gear:'Manuel', fuel:'Benzin', seats:5, price:429, desc:'Veludstyret mellemklasse med god plads og lavt forbrug.' },
+  { id:'skoda-octavia', name:'Skoda Octavia', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', seats:5, price:499, desc:'Rummelig stationcar med plads til familie og bagage.' },
+  { id:'vw-passat', name:'VW Passat', cat:'Stationcar', gear:'Automatik', fuel:'Diesel', seats:5, price:549, desc:'Premium stationcar — ideel til erhverv og længere køreture.' },
+  { id:'tesla-3', name:'Tesla Model 3', cat:'El', gear:'Automatik', fuel:'El', seats:5, price:699, tag:'Ny', tagClass:'blue', desc:'Elbil med lang rækkevidde og hurtig opladning inkluderet.' },
+  { id:'vw-transporter', name:'VW Transporter', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:3, price:599, tag:'Flytning', tagClass:'amber', desc:'Stor varebil — ideel til flytning og transport af møbler.' },
+  { id:'ford-transit', name:'Ford Transit', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:3, price:649, desc:'Rummelig kassevogn med højt tag — masser af lastplads.' },
+  { id:'renault-master', name:'Renault Master', cat:'Varebil', gear:'Manuel', fuel:'Diesel', seats:3, price:749, tag:'Størst', tagClass:'amber', desc:'Vores største varebil til store flytninger og paller.' },
+];
+
+const ico = {
+  gear:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>',
+  fuel:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v18M3 12h10M16 8l3 3v7a2 2 0 0 0 2 0v-9l-3-3"/></svg>',
+  seat:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+};
+
+document.getElementById('carGrid').innerHTML = cars.map(c => `
+  <a class="car-card" href="bil.html?car=${c.id}">
+    <div class="media">
+      <image-slot id="car-${c.id}" shape="rect" placeholder="${c.name} — produktfoto"></image-slot>
+      ${c.tag ? `<span class="badge ${c.tagClass} tag">${c.tag}</span>` : ''}
+    </div>
+    <div class="body">
+      <div class="car-top">
+        <div>
+          <h3>${c.name}</h3>
+          <div class="car-cat">${c.cat}</div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">${ico.gear} ${c.gear}</span>
+        <span class="spec">${ico.fuel} ${c.fuel}</span>
+        <span class="spec">${ico.seat} ${c.seats} sæder</span>
+      </div>
+      <p class="car-desc">${c.desc}</p>
+      <div class="car-foot">
+        <div class="price">
+          <div class="from">Fra</div>
+          <span class="amt tnum">${c.price}</span> <span class="per">kr./dag</span>
+        </div>
+        <span class="btn sm">Book nu →</span>
+      </div>
+    </div>
+  </a>
+`).join('');
+
+// filter chips (visual only for prototype)
+document.querySelectorAll('.filter').forEach(f => f.addEventListener('click', () => {
+  document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
+  f.classList.add('active');
+}));
+</script>
+</body>
+</html>
