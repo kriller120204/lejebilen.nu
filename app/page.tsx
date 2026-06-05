@@ -3,7 +3,7 @@ import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 import SearchBox from '@/components/SearchBox'
 import CarGrid from '@/components/CarGrid'
-import ImageSlot from '@/components/ImageSlot'
+import HeroSlideshow from '@/components/HeroSlideshow'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,7 +17,10 @@ async function getCars() {
 
 export default async function HomePage() {
   const cars = await getCars()
-  const heroImg = cars[0]?.images?.[0]?.url ?? null
+  const slides = cars
+    .filter(c => c.images?.[0]?.url)
+    .map(c => ({ src: c.images![0].url, navn: c.navn }))
+  if (slides.length === 0) slides.push({ src: null, navn: 'Lejebil fra Ølstykke Auto' })
   const minPrice = cars.length > 0 ? Math.min(...cars.map(c => c.pris_dag)) : 399
 
   return (
@@ -40,29 +43,7 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="hero-img">
-              <ImageSlot
-                src={heroImg}
-                placeholder="Lejebil fra Ølstykke Auto"
-                style={{ width: '100%', height: 400, borderRadius: 'var(--r-xl)', display: 'block' }}
-              />
-              <div className="float-badge fb-1">
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--green-bg)', color: 'var(--green)', display: 'grid', placeItems: 'center' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><polyline points="20 6 9 17 4 12" /></svg>
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 13 }}>Gratis afbestilling</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>Op til 24 timer inden</div>
-                </div>
-              </div>
-              <div className="float-badge fb-2">
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--blue-tint)', color: 'var(--blue)', display: 'grid', placeItems: 'center' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M12 2l8 3v7c0 5-8 10-8 10S4 17 4 12V5z" /></svg>
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 13 }}>Fuld forsikring</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>Inkluderet i prisen</div>
-                </div>
-              </div>
+              <HeroSlideshow slides={slides} />
             </div>
           </div>
           <SearchBox />
