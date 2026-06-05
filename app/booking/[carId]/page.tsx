@@ -25,7 +25,7 @@ export default async function BookingPage({ params, searchParams }: Props) {
     include: { images: { take: 1 } },
   })
 
-  if (!car || car.status === 'UDGAAET') notFound()
+  if (!car) notFound()
 
   return (
     <BookingFlow

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 async function getCars() {
   return db.car.findMany({
-    where: { status: { not: 'UDGAAET' } },
+    where: { status: { in: ['LEDIG', 'RESERVERET', 'UDLEJET', 'SERVICE'] } },
     orderBy: { pris_dag: 'asc' },
     include: { images: { take: 1 } },
   })

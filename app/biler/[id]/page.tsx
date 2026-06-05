@@ -36,7 +36,7 @@ export default async function CarDetailPage({ params, searchParams }: Props) {
     },
   })
 
-  if (!car || car.status === 'UDGAAET') notFound()
+  if (!car) notFound()
 
   const bookings = car.bookings.map(b => ({
     start: b.start.toISOString(),
