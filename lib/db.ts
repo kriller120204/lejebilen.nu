@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 function buildUrl() {
-  const url = process.env.DATABASE_URL ?? ''
+  const url = (process.env.DATABASE_URL ?? '').trim()
   if (!url) return url
   // Supabase kræver SSL fra serverless miljøer (Vercel)
   if (url.includes('supabase') && !url.includes('sslmode')) {
