@@ -17,7 +17,7 @@ async function getCars() {
 
 export default async function HomePage() {
   const cars = await getCars()
-  const slides = cars
+  const slides: { src: string | null; navn: string }[] = cars
     .filter(c => c.images?.[0]?.url)
     .map(c => ({ src: c.images![0].url, navn: c.navn }))
   if (slides.length === 0) slides.push({ src: null, navn: 'Lejebil fra Ølstykke Auto' })
