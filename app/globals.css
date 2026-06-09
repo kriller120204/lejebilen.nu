@@ -701,3 +701,8 @@ main, .hero, section, .acontent {
 }
 .bc-row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-top: 1px solid var(--line); }
 .bc-row.sub { color: var(--muted); font-size: 13px; }
+
+/* ── Admin booking drawer ────────────────────────────────────────── */
+.dr-sec-label { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.admin-search-row:last-child { border-bottom: 0 !important; }
+.admin-search-row:hover { background: var(--bg-2); }

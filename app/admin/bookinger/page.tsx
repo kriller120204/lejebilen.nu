@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import GanttCalendar from '@/components/GanttCalendar'
 import BookingDrawer from '@/components/BookingDrawer'
+import AdminBookingDrawer from '@/components/AdminBookingDrawer'
 
 interface Car { id: string; navn: string; reg_nr: string }
 interface Booking {
@@ -18,6 +19,7 @@ export default function BookingerPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selected, setSelected] = useState<Booking | null>(null)
   const [view, setView] = useState<'gantt' | 'list'>('gantt')
+  const [nyBookingOpen, setNyBookingOpen] = useState(false)
 
   const load = useCallback(async () => {
     const [carsRes, bookRes] = await Promise.all([
@@ -44,15 +46,14 @@ export default function BookingerPage() {
       <div className="page-head">
         <div>
           <h1>Bookinger</h1>
-          <p className="sub">{bookings.length} bookinger i alt</p>
+          <span className="sub">{bookings.length} bookinger i alt</span>
         </div>
         <div className="row gap-8">
-          <button className={`btn sm ${view === 'gantt' ? '' : 'ghost'}`} onClick={() => setView('gantt')}>
-            Kalender
-          </button>
-          <button className={`btn sm ${view === 'list' ? '' : 'ghost'}`} onClick={() => setView('list')}>
-            Liste
-          </button>
+          <div className="row gap-8">
+            <button className={`btn sm ${view === 'gantt' ? '' : 'ghost'}`} onClick={() => setView('gantt')}>Kalender</button>
+            <button className={`btn sm ${view === 'list' ? '' : 'ghost'}`} onClick={() => setView('list')}>Liste</button>
+          </div>
+          <button className="btn sm" onClick={() => setNyBookingOpen(true)}>+ Ny booking</button>
         </div>
       </div>
 
@@ -103,6 +104,12 @@ export default function BookingerPage() {
         booking={selected}
         onClose={() => setSelected(null)}
         onUpdate={load}
+      />
+
+      <AdminBookingDrawer
+        open={nyBookingOpen}
+        onClose={() => setNyBookingOpen(false)}
+        onSaved={load}
       />
     </div>
   )
