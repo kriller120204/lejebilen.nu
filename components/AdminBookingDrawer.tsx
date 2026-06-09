@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { fmt } from '@/lib/utils'
 
 interface Customer {
@@ -49,6 +49,7 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
   const [gentagAktiv, setGentagAktiv] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const load = useCallback(async () => {
     const [cRes, kRes] = await Promise.all([
@@ -59,7 +60,13 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
     if (kRes.ok) setCustomers(await kRes.json())
   }, [])
 
-  useEffect(() => { if (open) { load(); reset() } }, [open, load])
+  useEffect(() => {
+    if (open) {
+      load()
+      reset()
+      setTimeout(() => searchRef.current?.focus(), 50)
+    }
+  }, [open, load])
 
   // Auto-beregn pris
   useEffect(() => {
@@ -142,7 +149,7 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
             <h2 style={{ fontSize: 20 }}>Ny booking</h2>
             <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 2 }}>Opret booking på vegne af kunde</div>
           </div>
-          <button className="close-x" onClick={onClose}>
+          <button type="button" className="close-x" onClick={onClose}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
           </button>
         </div>
@@ -155,6 +162,7 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                 <div className="dr-sec-label">Kunde</div>
                 <button
+                  type="button"
                   style={{ fontSize: 12.5, color: 'var(--blue)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
                   onClick={() => { setNyKunde(v => !v); setSelectedCustomer(null); setSearch('') }}
                 >
@@ -179,11 +187,11 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
                   ) : (
                     <>
                       <input
+                        ref={searchRef}
                         className="input"
                         placeholder="Søg navn, email eller telefon…"
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        autoFocus
                       />
                       {search.length > 0 && (
                         <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--r)', overflow: 'hidden', marginTop: 6 }}>
@@ -345,10 +353,10 @@ export default function AdminBookingDrawer({ open, onClose, onSaved }: Props) {
             )}
 
             <div className="row gap-12">
-              <button className="btn block" onClick={handleSave} disabled={saving}>
+              <button type="button" className="btn block" onClick={handleSave} disabled={saving}>
                 {saving ? 'Opretter…' : antalBookinger > 1 ? `Opret ${antalBookinger} bookinger` : 'Opret booking'}
               </button>
-              <button className="btn ghost" onClick={onClose} disabled={saving}>Annullér</button>
+              <button type="button" className="btn ghost" onClick={onClose} disabled={saving}>Annullér</button>
             </div>
 
           </div>
